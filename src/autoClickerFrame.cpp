@@ -2,6 +2,7 @@
 
 #include <wx/valnum.h>
 #include <wx/config.h>
+#include "app.xpm"
 
 enum {
 	ID_SELECT_POINT = 1, ID_TRIGGER_SET_POINT, ID_GO, ID_DOCLICK
@@ -55,6 +56,8 @@ AutoClickerFrame::AutoClickerFrame() :
 	delay = config->ReadLong("delay", 40);
 	targetClicks = duration * 1000/delay;
 	delete config;
+
+	SetIcon(wxIcon(app_xpm));
 
 	wxMenu *menuFile = new wxMenu;
 	menuFile->Append(wxID_EXIT);
