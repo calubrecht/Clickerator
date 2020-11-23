@@ -52,7 +52,7 @@ wxBoxSizer* AutoClickerFrame::getGoBtnRow() {
 }
 
 AutoClickerFrame::AutoClickerFrame() :
-		wxFrame(NULL, wxID_ANY, "Clickerator"), initialX(0), initialY(0) {
+		wxFrame(NULL, wxID_ANY, "Clickerator", wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE ^ wxRESIZE_BORDER ^ wxMAXIMIZE_BOX), initialX(0), initialY(0) {
 	wxConfig *config = new wxConfig("Clickerator");
 	duration = config->ReadLong("duration", 20);
 	delay = config->ReadLong("delay", 40);
@@ -84,6 +84,7 @@ AutoClickerFrame::AutoClickerFrame() :
 	vSizer->Add(getGoBtnRow(), 1, wxALIGN_CENTER_HORIZONTAL, 5);
 	vSizer->SetMinSize(wxSize(600, 100));
 	SetSizerAndFit(vSizer);
+	SetMaxSize(GetSize());
 	timer = new wxTimer(this, ID_TRIGGER_SET_POINT);
 	clickStartTimer = new wxTimer(this, ID_DOCLICK);
 
