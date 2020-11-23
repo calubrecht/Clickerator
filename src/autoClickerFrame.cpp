@@ -1,6 +1,7 @@
 #include "autoClickerFrame.h"
 
 #include <wx/valnum.h>
+#include <wx/config.h>
 
 enum {
 	ID_SELECT_POINT = 1, ID_TRIGGER_SET_POINT, ID_GO, ID_DOCLICK
@@ -48,8 +49,13 @@ wxBoxSizer* AutoClickerFrame::getGoBtnRow() {
 }
 
 AutoClickerFrame::AutoClickerFrame() :
-		wxFrame(NULL, wxID_ANY, "Clickerator"), initialX(0), initialY(0), delay(40), targetClicks(1000) {
-	duration = targetClicks * delay / 1000;
+		wxFrame(NULL, wxID_ANY, "Clickerator"), initialX(0), initialY(0) {
+	wxConfig *config = new wxConfig("Clickerator");
+	duration = config->ReadLong("duration", 20);
+	delay = config->ReadLong("delay", 40);
+	targetClicks = duration * 1000/delay;
+	delete config;
+
 	wxMenu *menuFile = new wxMenu;
 	menuFile->Append(wxID_EXIT);
 
@@ -64,6 +70,7 @@ AutoClickerFrame::AutoClickerFrame() :
 	Bind(wxEVT_TIMER, &AutoClickerFrame::OnTriggerSetPoint, this,
 			ID_TRIGGER_SET_POINT);
 	Bind(wxEVT_TIMER, &AutoClickerFrame::ExecuteClick, this, ID_DOCLICK);
+	Bind(wxEVT_CLOSE_WINDOW, &AutoClickerFrame::OnClose, this);
 
 	wxBoxSizer *vSizer = new wxBoxSizer(wxVERTICAL);
 	vSizer->Add(getSelectPointRow(), 1, wxEXPAND | wxALL, 10);
@@ -83,6 +90,15 @@ AutoClickerFrame::AutoClickerFrame() :
 
 void AutoClickerFrame::OnExit(wxCommandEvent &event) {
 	Close(true);
+}
+
+void AutoClickerFrame::OnClose(wxCloseEvent& event)
+{
+	wxConfig *config = new wxConfig("Clickerator");
+	config->Write("duration", duration);
+	config->Write("delay", delay);
+	delete config;
+	Destroy();
 }
 
 class TriggerEvtHandler: public wxEvtHandler {

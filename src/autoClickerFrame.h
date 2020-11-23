@@ -15,6 +15,7 @@ private:
 	void OnGoClicker(wxCommandEvent &event);
 	void OnTriggerSetPoint(wxTimerEvent &event);
 	void ExecuteClick(wxTimerEvent &event);
+	void OnClose(wxCloseEvent& event);
 
 	void UpdateCountFromInputs(wxFocusEvent &event);
 	void UpdateDurationFromInputs(wxFocusEvent &event);
