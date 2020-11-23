@@ -2,6 +2,8 @@
 
 #include <wx/valnum.h>
 #include <wx/config.h>
+
+#pragma GCC diagnostic ignored "-Wwrite-strings"
 #include "app.xpm"
 
 enum {
