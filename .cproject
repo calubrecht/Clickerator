@@ -50,6 +50,7 @@
 									<listOptionValue builtIn="false" value="wx_gtk3u_core-3.0"/>
 									<listOptionValue builtIn="false" value="wx_baseu_xml-3.0"/>
 									<listOptionValue builtIn="false" value="wx_baseu_net-3.0"/>
+									<listOptionValue builtIn="false" value="wx_baseu-3.0"/>
 								</option>
 								<option id="gnu.cpp.link.option.pthread.18023380" name="Support for pthread (-pthread)" superClass="gnu.cpp.link.option.pthread" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1046542894" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
@@ -92,7 +93,7 @@
 									<listOptionValue builtIn="false" value="/usr/lib/x86_64-linux-gnu/wx/include/gtk3-unicode-3.0"/>
 									<listOptionValue builtIn="false" value="/usr/include/wx-3.0"/>
 								</option>
-								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.cpp.compiler.option.preprocessor.def.1044809208" superClass="gnu.cpp.compiler.option.preprocessor.def" useByScannerDiscovery="false" valueType="definedSymbols">
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.cpp.compiler.option.preprocessor.def.1044809208" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="_FILE_OFFSET_BITS=64"/>
 									<listOptionValue builtIn="false" value="WXUSINGDLL"/>
 									<listOptionValue builtIn="false" value="__WXGTK__"/>
