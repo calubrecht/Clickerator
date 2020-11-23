@@ -1,6 +1,6 @@
 #include "autoClickerFrame.h"
 
-#include <vector>
+#include <wx/valnum.h>
 
 enum {
 	ID_SELECT_POINT = 1, ID_TRIGGER_SET_POINT, ID_GO, ID_DOCLICK
@@ -21,7 +21,19 @@ wxBoxSizer* AutoClickerFrame::getSelectPointRow() {
 
 wxBoxSizer* AutoClickerFrame::getClickParamsRow() {
 	wxBoxSizer *newSizer = new wxBoxSizer(wxHORIZONTAL);
+	wxIntegerValidator<int> delayValidator(&delay);
+	wxIntegerValidator<int> durationValidator(&duration);
+	wxIntegerValidator<int> countValidator(&targetClicks);
 
+    newSizer->Add(new wxStaticText(this, -1, "Click Delay:", wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT), 1,wxALIGN_CENTER_VERTICAL,1);
+    delayCtrl = new wxTextCtrl(this, -1, "", wxDefaultPosition, wxSize(60,20),0, delayValidator);
+    newSizer->Add(delayCtrl, wxLeft, 1);
+    newSizer->Add(new wxStaticText(this, -1, "  Duration:", wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT), 1,wxALIGN_CENTER_VERTICAL,1);
+    durationCtrl = new wxTextCtrl(this, -1, "", wxDefaultPosition, wxSize(60,20), 0, durationValidator);
+    newSizer->Add(durationCtrl, wxLeft, 1);
+    newSizer->Add(new wxStaticText(this, -1, "  Total Clicks:", wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT), 1,wxALIGN_CENTER_VERTICAL,1);
+    clickCountCtrl = new wxTextCtrl(this, -1, "", wxDefaultPosition, wxSize(60,20), 0, countValidator);
+    newSizer->Add(clickCountCtrl, wxLeft, 1);
 	return newSizer;
 
 }
@@ -62,6 +74,11 @@ AutoClickerFrame::AutoClickerFrame() :
 	SetSizerAndFit(vSizer);
 	timer = new wxTimer(this, ID_TRIGGER_SET_POINT);
 	clickStartTimer = new wxTimer(this, ID_DOCLICK);
+
+	delayCtrl->Bind(wxEVT_KILL_FOCUS, &AutoClickerFrame::UpdateCountFromInputs, this);
+	durationCtrl->Bind(wxEVT_KILL_FOCUS, &AutoClickerFrame::UpdateCountFromInputs, this);
+	clickCountCtrl->Bind(wxEVT_KILL_FOCUS, &AutoClickerFrame::UpdateDurationFromInputs, this);
+	TransferDataToWindow();
 }
 
 void AutoClickerFrame::OnExit(wxCommandEvent &event) {
@@ -103,14 +120,25 @@ void AutoClickerFrame::OnGoClicker(wxCommandEvent &event)
 
 void AutoClickerFrame::ExecuteClick(wxTimerEvent &event)
 {
-	cout << "Go click " << endl;
 	string cmd = string("xdotool click --delay ") + to_string(delay) + " --repeat " + to_string(targetClicks) + " 1";
 	system(cmd.c_str());
 	goBtn->Enable();
 }
 
-void AutoClickerFrame::Renable(wxTimerEvent &event)
+void AutoClickerFrame::UpdateCountFromInputs(wxFocusEvent &event)
 {
-	goBtn->Enable();
+	TransferDataFromWindow();
+	targetClicks = duration * 1000/delay;
+	TransferDataToWindow();
 }
 
+void AutoClickerFrame::UpdateDurationFromInputs(wxFocusEvent &event)
+{
+	TransferDataFromWindow();
+	int estimateClicks = duration * 1000/delay;
+	if (estimateClicks != targetClicks)
+	{
+	  duration = targetClicks * delay / 1000;
+	}
+	TransferDataToWindow();
+}

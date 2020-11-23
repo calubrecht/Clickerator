@@ -16,6 +16,8 @@ private:
 	void OnTriggerSetPoint(wxTimerEvent &event);
 	void ExecuteClick(wxTimerEvent &event);
 
+	void UpdateCountFromInputs(wxFocusEvent &event);
+	void UpdateDurationFromInputs(wxFocusEvent &event);
 
 	wxBoxSizer* getSelectPointRow();
 	wxBoxSizer* getClickParamsRow();
@@ -32,5 +34,8 @@ private:
 	wxButton *goBtn;
 	wxTimer *timer;
 	wxTimer *clickStartTimer;
+	wxTextCtrl* delayCtrl;
+	wxTextCtrl* durationCtrl;
+	wxTextCtrl* clickCountCtrl;
 };
 
