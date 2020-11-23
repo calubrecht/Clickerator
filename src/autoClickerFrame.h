@@ -12,7 +12,10 @@ public:
 private:
 	void OnExit(wxCommandEvent &event);
 	void OnSelectPoint(wxCommandEvent &event);
+	void OnGoClicker(wxCommandEvent &event);
 	void OnTriggerSetPoint(wxTimerEvent &event);
+	void ExecuteClick(wxTimerEvent &event);
+
 
 	wxBoxSizer* getSelectPointRow();
 	wxBoxSizer* getClickParamsRow();
@@ -20,7 +23,6 @@ private:
 
 	int initialX;
 	int initialY;
-	bool locationSet;
 	int delay;
 	int duration;
 	int targetClicks;
@@ -29,5 +31,6 @@ private:
 	wxButton *selectPointBtn;
 	wxButton *goBtn;
 	wxTimer *timer;
+	wxTimer *clickStartTimer;
 };
 
