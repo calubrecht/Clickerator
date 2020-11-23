@@ -1,0 +1,8 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Type=Application
+Terminal=false
+Encoding=UTF-8
+Name=Clickerator
+Exec=/usr/local/bin/Clickerator
+Icon=/usr/local/share/pixmaps/clickerator.xpm
