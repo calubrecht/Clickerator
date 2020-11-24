@@ -2,6 +2,7 @@
 
 #include <wx/valnum.h>
 #include <wx/config.h>
+#include <boost/filesystem.hpp>
 
 #pragma GCC diagnostic ignored "-Wwrite-strings"
 #include "app.xpm"
@@ -11,6 +12,32 @@ enum {
 };
 
 using namespace std;
+
+
+std::string resolveLocation(const std::string& rawLocation)
+{
+	if (rawLocation.length() == 0)
+	{
+		return rawLocation;
+	}
+	boost::filesystem::path path(rawLocation);
+	if (path.is_absolute())
+	{
+		return path.string();
+	}
+	const char* homeDir = getenv("HOME");
+	if (homeDir == NULL)
+	{
+		return path.string();
+	}
+	string sHome(homeDir);
+	if (homeDir[strlen(homeDir)-1] != boost::filesystem::path::preferred_separator )
+	{
+		sHome += boost::filesystem::path::preferred_separator;
+	}
+	boost::filesystem::path homePath(sHome);
+	return (homePath += path).string();
+}
 
 wxBoxSizer* AutoClickerFrame::getSelectPointRow() {
 	wxBoxSizer *newSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -51,13 +78,13 @@ wxBoxSizer* AutoClickerFrame::getGoBtnRow() {
 
 }
 
-AutoClickerFrame::AutoClickerFrame() :
-		wxFrame(NULL, wxID_ANY, "Clickerator", wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE ^ wxRESIZE_BORDER ^ wxMAXIMIZE_BOX), initialX(0), initialY(0) {
-	wxConfig *config = new wxConfig("Clickerator");
-	duration = config->ReadLong("duration", 20);
-	delay = config->ReadLong("delay", 40);
+AutoClickerFrame::AutoClickerFrame(const std::string& configFile) :
+		wxFrame(NULL, wxID_ANY, "Clickerator", wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE ^ wxRESIZE_BORDER ^ wxMAXIMIZE_BOX), initialX(0), initialY(0),
+		configFileLocation(resolveLocation(configFile)) {
+	wxConfig config("Clickerator", "", configFileLocation);
+	duration = config.ReadLong("duration", 20);
+	delay = config.ReadLong("delay", 40);
 	targetClicks = duration * 1000/delay;
-	delete config;
 
 	SetIcon(wxIcon(app_xpm));
 
@@ -100,10 +127,26 @@ void AutoClickerFrame::OnExit(wxCommandEvent &event) {
 
 void AutoClickerFrame::OnClose(wxCloseEvent& event)
 {
-	wxConfig *config = new wxConfig("Clickerator");
-	config->Write("duration", duration);
-	config->Write("delay", delay);
-	delete config;
+	wxConfig config("Clickerator", "", configFileLocation);
+	if (configFileLocation.length() != 0)
+	{
+		boost::filesystem::path configFilePath(configFileLocation);
+		boost::filesystem::path configDir = configFilePath.remove_filename();
+		try
+		{
+	      boost::filesystem::create_directories(configDir);
+		}
+		catch (exception& e)
+		{
+			cout << string("Unable to create path to config file because: ") + e.what() << endl;
+			Destroy();
+			return;
+		}
+	}
+
+	config.Write("duration", duration);
+	config.Write("delay", delay);
+
 	Destroy();
 }
 
@@ -142,9 +185,12 @@ void AutoClickerFrame::OnGoClicker(wxCommandEvent &event)
 
 void AutoClickerFrame::ExecuteClick(wxTimerEvent &event)
 {
+	wxStopWatch watch;
 	string cmd = string("xdotool click --delay ") + to_string(delay) + " --repeat " + to_string(targetClicks) + " 1";
 	system(cmd.c_str());
 	goBtn->Enable();
+	watch.Pause();
+	cout << "Elapsed time " + to_string(watch.Time()/1000.0) + "s" << endl;
 }
 
 void AutoClickerFrame::UpdateCountFromInputs(wxFocusEvent &event)

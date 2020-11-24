@@ -4,10 +4,12 @@
 #include <wx/wx.h>
 #endif
 
+#include <string>
+
 class AutoClickerFrame: public wxFrame {
 public:
 
-	AutoClickerFrame();
+	AutoClickerFrame(const std::string& configFile);
 
 private:
 	void OnExit(wxCommandEvent &event);
@@ -38,5 +40,7 @@ private:
 	wxTextCtrl* delayCtrl;
 	wxTextCtrl* durationCtrl;
 	wxTextCtrl* clickCountCtrl;
+
+	std::string configFileLocation;
 };
 

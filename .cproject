@@ -51,6 +51,7 @@
 									<listOptionValue builtIn="false" value="wx_baseu_xml-3.0"/>
 									<listOptionValue builtIn="false" value="wx_baseu_net-3.0"/>
 									<listOptionValue builtIn="false" value="wx_baseu-3.0"/>
+									<listOptionValue builtIn="false" value=":libboost_filesystem.a"/>
 								</option>
 								<option id="gnu.cpp.link.option.pthread.18023380" name="Support for pthread (-pthread)" superClass="gnu.cpp.link.option.pthread" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1046542894" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
@@ -116,6 +117,7 @@
 									<listOptionValue builtIn="false" value="wx_baseu_xml-3.0"/>
 									<listOptionValue builtIn="false" value="wx_baseu_net-3.0"/>
 									<listOptionValue builtIn="false" value="wx_baseu-3.0"/>
+									<listOptionValue builtIn="false" value=":libboost_filesystem.a"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1665442738" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>

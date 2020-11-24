@@ -4,5 +4,5 @@ Type=Application
 Terminal=false
 Encoding=UTF-8
 Name=Clickerator
-Exec=/usr/local/bin/Clickerator
+Exec=/usr/local/bin/Clickerator .config/clickerator/config
 Icon=/usr/local/share/pixmaps/clickerator.xpm

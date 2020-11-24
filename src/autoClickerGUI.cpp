@@ -4,7 +4,12 @@
 wxIMPLEMENT_APP(AutoClickerApp);
 
 bool AutoClickerApp::OnInit() {
-	AutoClickerFrame *frame = new AutoClickerFrame();
+	std::string configName = "";
+	if (argc > 1)
+	{
+		configName = argv[1];
+	}
+	AutoClickerFrame *frame = new AutoClickerFrame(configName);
 	frame->Show(true);
 	return true;
 }
